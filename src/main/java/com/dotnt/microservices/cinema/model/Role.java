@@ -21,6 +21,11 @@ public class Role extends AbstractEntity<UUID> {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "roles")
+    @OneToMany(mappedBy = "role")
     private Set<UserHasRole> userHasRoles;
+
+    @OneToMany(mappedBy = "role")
+    private Set<RoleHasPermission> roleHasPermissions;
+
+
 }

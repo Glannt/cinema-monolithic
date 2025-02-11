@@ -21,6 +21,7 @@ public class AbstractEntity<T extends Serializable> implements Serializable {
     @Column(name = "id")
     private T id;
 
+
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;

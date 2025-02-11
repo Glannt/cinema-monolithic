@@ -8,22 +8,20 @@ import lombok.*;
 
 import java.util.UUID;
 
-@Entity(name = "UserHasRole")
-@Table(name = "user_role")
+@Entity(name = "HallHasSeat")
+@Table(name = "hall_seat")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @Builder
-public class UserHasRole extends AbstractEntity<UUID>{
+public class HallHasSeat extends AbstractEntity<UUID> {
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "hall_id", nullable = false)
+    private Hall hall;
 
     @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
-    private Role role;
-
-   
+    @JoinColumn(name = "seat_id", nullable = false)
+    private Seat seat;
 }
