@@ -5,13 +5,11 @@ import com.dotnt.microservices.cinema.common.UserType;
 import com.dotnt.microservices.cinema.configuration.JwtTokenProvider;
 import com.dotnt.microservices.cinema.dto.request.SignInRequest;
 import com.dotnt.microservices.cinema.dto.request.UserCreationRequest;
-import com.dotnt.microservices.cinema.dto.response.ApiResponse;
 import com.dotnt.microservices.cinema.dto.response.AuthenticationResponse;
 import com.dotnt.microservices.cinema.dto.response.LoginResponse;
 import com.dotnt.microservices.cinema.dto.response.SignupResponse;
 import com.dotnt.microservices.cinema.exception.AppException;
 import com.dotnt.microservices.cinema.exception.ErrorCode;
-import com.dotnt.microservices.cinema.model.Address;
 import com.dotnt.microservices.cinema.model.Role;
 import com.dotnt.microservices.cinema.model.User;
 import com.dotnt.microservices.cinema.model.UserHasRole;
@@ -23,7 +21,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -44,11 +41,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtTokenProvider jwtTokenProvider;
     private final AddressRepository addressRepository;
     private final AuthenticationManager authenticationManager;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public AuthenticationResponse<SignupResponse> signup(UserCreationRequest request) {
 
-        if(userRepository.existsByEmail(request.getEmail())){
+        if (userRepository.existsByEmail(request.getEmail())) {
             log.info("User already existed ", request.getEmail());
             throw new AppException(ErrorCode.USER_EXISTED);
         }
@@ -64,9 +62,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .status(UserStatus.ACTIVE)
                 .addressId(addressRepository
                         .findIdByProvinceCodeAndDistrictCodeAndWardCode(
-                                 String.valueOf(request.getAddress().getProvinceCode())
-                                ,String.valueOf(request.getAddress().getDistrictCode())
-                                ,String.valueOf(request.getAddress().getWardCode())))
+                                String.valueOf(request.getAddress().getProvinceCode())
+                                , String.valueOf(request.getAddress().getDistrictCode())
+                                , String.valueOf(request.getAddress().getWardCode())))
                 .phoneNumber(request.getPhoneNumber())
                 .build();
         user.setCreatedBy(request.getEmail());
@@ -114,9 +112,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .token(accessToken)
                 .object(LoginResponse
                         .builder()
-                                .refreshToken(refreshToken)
-                                .accessToken(accessToken)
-                                .userId(user.getId())
+                        .refreshToken(refreshToken)
+                        .accessToken(accessToken)
+                        .userId(user.getId())
 //                        .roles(user.getUserHasRoles().stream().map(UserHasRole::getRole).map(Role::getName).collect(Collectors.toSet()))
                         .build())
                 .build();

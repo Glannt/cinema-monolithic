@@ -9,14 +9,14 @@ public class PhoneNumberValidator implements ConstraintValidator<PhoneNumberCons
 
     private int min = 10;
 
-@Override
-public boolean isValid(String value, ConstraintValidatorContext context) {
-    if (Objects.isNull(value)) return true;
+    @Override
+    public boolean isValid(String value, ConstraintValidatorContext context) {
+        if (Objects.isNull(value)) return true;
 
-    boolean isValid = value.length() - 1 != 10 ? false : true;
+        boolean isValid = value.length() - 1 != 10 ? false : true;
 
-    return isValid;
-}
+        return isValid;
+    }
 
     @Override
     public void initialize(PhoneNumberConstraint constraintAnnotation) {

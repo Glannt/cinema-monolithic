@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import java.io.Serializable;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

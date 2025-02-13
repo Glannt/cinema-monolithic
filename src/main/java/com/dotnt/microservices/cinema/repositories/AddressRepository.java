@@ -6,11 +6,19 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+
 @Repository
 public interface AddressRepository extends JpaRepository<Address, UUID> {
     @Query("SELECT a.id FROM Address a WHERE a.provinceCode = :pCode AND a.districtCode = :dCode AND a.wardCode = :wCode")
     UUID findIdByProvinceCodeAndDistrictCodeAndWardCode(@Param("pCode") String pCode,
                                                         @Param("dCode") String dCode,
                                                         @Param("wCode") String wCode);
+
+    Optional<Address> findAddressById(UUID addressId);
+
+    List<Address> findAllByIdIn(Collection<UUID> ids);
 }

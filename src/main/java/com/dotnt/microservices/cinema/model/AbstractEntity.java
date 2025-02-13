@@ -37,4 +37,15 @@ public class AbstractEntity<T extends Serializable> implements Serializable {
     @LastModifiedBy
     @Column(name = "updated_by")
     private String updatedBy;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }

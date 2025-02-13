@@ -1,11 +1,10 @@
 package com.dotnt.microservices.cinema.configuration;
 
 import com.dotnt.microservices.cinema.model.User;
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.AeadAlgorithm;
-import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SecureDigestAlgorithm;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 import java.util.function.Function;
@@ -48,7 +46,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    private SecretKey getSigningKey(){
+    private SecretKey getSigningKey() {
         // decode secret key to signing key
         byte[] keyBytes = Base64.getDecoder().decode(jwtSecret.getBytes(StandardCharsets.UTF_8));
         Key = new SecretKeySpec(keyBytes, "HmacSHA256");
@@ -88,7 +86,8 @@ public class JwtTokenProvider {
             throw new BadCredentialsException("Token validation failed: " + e.getMessage());
         }
     }
-    private Claims exstractAllClaims(String token){
+
+    private Claims exstractAllClaims(String token) {
         return Jwts
                 .parser()
                 .verifyWith(getSigningKey())    // create signing key to decoded token
@@ -97,7 +96,7 @@ public class JwtTokenProvider {
                 .getPayload();   // get all Claims within token
     }
 
-    public <T> T extractClaims(String token, Function<Claims, T> claimsResolver){
+    public <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = exstractAllClaims(token);
         return claimsResolver.apply(claims);
     }

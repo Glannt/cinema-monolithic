@@ -1,9 +1,9 @@
 package com.dotnt.microservices.cinema.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
 
-import java.io.Serializable;
 import java.util.UUID;
 
 @Entity(name = "Address")
@@ -13,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Address extends AbstractEntity<UUID>{
+public class Address extends AbstractEntity<UUID> {
 
 
     private String country;

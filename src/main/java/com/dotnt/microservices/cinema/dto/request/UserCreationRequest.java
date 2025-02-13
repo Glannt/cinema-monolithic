@@ -3,7 +3,6 @@ package com.dotnt.microservices.cinema.dto.request;
 
 import com.dotnt.microservices.cinema.model.Address;
 import com.dotnt.microservices.cinema.validator.DobConstraint;
-import com.dotnt.microservices.cinema.validator.PhoneNumberConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -34,11 +33,10 @@ public class UserCreationRequest {
     @DobConstraint(min = 10, message = "INVALID_DOB")
     private LocalDate dob;
 
-//    @PhoneNumberConstraint(min= 10, message = "INVALID_PN")
+    //    @PhoneNumberConstraint(min= 10, message = "INVALID_PN")
     private String phoneNumber;
 
     private Address address;
-
 
 
 }

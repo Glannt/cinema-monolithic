@@ -2,10 +2,6 @@ package com.dotnt.microservices.cinema.configuration;
 
 
 import com.dotnt.microservices.cinema.services.CustomUserDetailService;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +20,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.crypto.SecretKey;
-
 import java.io.IOException;
 
 
@@ -33,7 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Value("${jwt.secret}")
     String jwtSecret;
     @Autowired
-    private  JwtTokenProvider jwtTokenProvider;
+    private JwtTokenProvider jwtTokenProvider;
 
     @Autowired
     CustomUserDetailService customUserDetailService;
@@ -51,23 +46,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            bearerToken =  bearerToken.substring(7);
+            bearerToken = bearerToken.substring(7);
         } else {
-            filterChain.doFilter(request,response);
+            filterChain.doFilter(request, response);
             return;
         }
-
 
 
         jwtToken = bearerToken;
 
         email = jwtTokenProvider.extractUsername(jwtToken);
 
-        if(email != null && SecurityContextHolder.getContext().getAuthentication() == null){
+        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.customUserDetailService.loadUserByUsername(email);
-            if(jwtTokenProvider.validateToken(jwtToken)){
+            if (jwtTokenProvider.validateToken(jwtToken)) {
                 SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,null, userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 securityContext.setAuthentication(authToken);
                 SecurityContextHolder.setContext(securityContext);
@@ -79,10 +73,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-
 
 
 }
